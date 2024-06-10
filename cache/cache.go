@@ -5,7 +5,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -20,7 +19,6 @@ const (
 type Cache struct {
     InMemory  *LRUCache
     redis     *redis.Client
-    memcached *memcache.Client
     backend   Backend
     ctx       context.Context
 }

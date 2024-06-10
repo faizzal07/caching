@@ -8,8 +8,15 @@ import (
 func TestInMemoryCache_SetAndGet(t *testing.T) {
     cache := NewInMemoryCache(2)
 
-    cache.Set("key1", "value1", 1*time.Minute)
-    if value, err := cache.Get("key1"); err != nil || value != "value1" {
+    err := cache.Set("key1", "value1", 1*time.Minute)
+    if err != nil {
+        t.Errorf("failed to set value: %v", err)
+    }
+    value, err := cache.Get("key1")
+    if err != nil {
+        t.Errorf("unexpected error: %v", err)
+    }
+    if value != "value1" {
         t.Errorf("expected value1, got %v", value)
     }
 }
@@ -17,17 +24,16 @@ func TestInMemoryCache_SetAndGet(t *testing.T) {
 func TestRedisCache_SetAndGet(t *testing.T) {
     cache := NewRedisCache("localhost:6379", "", 0)
 
-    cache.Set("key1", "value1", 1*time.Minute)
-    if value, err := cache.Get("key1"); err != nil || value != "value1" {
-        t.Errorf("expected value1, got %v", value)
+    err := cache.Set("key1", "value1", 1*time.Minute)
+    if err != nil {
+        t.Errorf("failed to set value: %v", err)
     }
-}
 
-func TestMemcachedCache_SetAndGet(t *testing.T) {
-    cache := NewMemcachedCache("localhost:11211")
-
-    cache.Set("key1", []byte("value1"), 1*time.Minute)
-    if value, err := cache.Get("key1"); err != nil || string(value.([]byte)) != "value1" {
+    value, err := cache.Get("key1")
+    if err != nil {
+        t.Errorf("failed to get value: %v", err)
+    }
+	if value != "value1" {
         t.Errorf("expected value1, got %v", value)
     }
 }

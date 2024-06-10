@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -8,7 +9,7 @@ import (
 func BenchmarkLRUCache_Set(b *testing.B) {
     cache := NewLRUCache(1000)
     for i := 0; i < b.N; i++ {
-        cache.Set("key"+string(i), "value", 1*time.Minute)
+        cache.Set("key"+fmt.Sprintf("%d", i), "value", 1*time.Minute)
     }
 }
 
